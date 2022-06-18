@@ -27,7 +27,7 @@ const wallB = Bodies.rectangle(width - 3, height / 2, 10, height, {
     fillStyle: 'blue',
   }
 });
-const floor = Bodies.rectangle(width / 2, 500, width, 20, {
+const floor = Bodies.rectangle(width / 2, height, width, 20, {
   isStatic: true,
   render: {
     fillStyle: 'blue',
@@ -52,14 +52,14 @@ var stack2 = Composites.stack(0, 0, 1, 1, 0, 0, function (x: number, y: number) 
 const allBodies = [floor, ball, stack, stack2, wall, wallB]
 
 function App() {
-  const [l, setL] = useState(200)
-  const [t, setT] = useState(100)
+  const [l, setL] = useState(200);
+  const [t, setT] = useState(100);
   const boxRef = useRef(null);
   const canvasRef = useRef(null);
   const appEngine = (coords: any) => {
     setL(coords.x);
     setT(coords.y);
-  }
+  };
   useEffect(() => {
     const engine = Engine.create(undefined)
     const render = Render.create({
@@ -68,51 +68,35 @@ function App() {
       canvas: canvasRef.current ? canvasRef.current : undefined,
       options: {
         width,
-        height: 500,
+        height,
         background: '#ccc',
         wireframes: false,
       },
-    })
-    Runner.run(engine)
-    Render.run(render)
-    const comp = Composite.add(engine.world, allBodies,);
-    const c: any = {
+    });
+    const mouse = Mouse.create(render.canvas);
+    const constraint: any = {
       stiffness: 0.2,
-      render: {
-        visible: false
-      }
-    }
-    var mouse = Mouse.create(render.canvas),
-      mouseConstraint = MouseConstraint.create(engine, {
-        mouse: mouse,
-        constraint: c
+      render: { visible: false }
+    };
+    const mouseConstraint = MouseConstraint.create(engine, {
+      mouse,
+      constraint
+    });
+    Events.on(mouseConstraint, 'mousedown', () => {
+      Composite.scale(stack2, 1.1, 1.1, {
+        x: 0,
+        y: 0
       });
+    });
     Events.on(engine, "afterUpdate", (e) => {
       const { x, y } = e.source.world.bodies[1].bounds.min;
       appEngine({ x, y })
-    })
-    Events.on(mouseConstraint, 'mousedown', function (event) {
-      const ball = Bodies.circle(27.01568998035037, 274.3160486715391, 54, {
-        id: 999999,
-        inertia: Infinity,
-        frictionAir: 0.0001,
-        slop: 1,
-        friction: 0.8,
-        restitution: 0.9,
-        render: {
-          fillStyle: 'yellow',
-        },
-      })
-      // Composite.add(engine.world, ball);
-    })
-    Composite.add(engine.world, mouseConstraint);
-  }, [])
-  const handleClick = () => {
-    Composite.scale(stack2, 1.1, 1.1, {
-      x: 10,
-      y: 10
     });
-  }
+    Runner.run(engine);
+    Render.run(render);
+    Composite.add(engine.world, mouseConstraint);
+    Composite.add(engine.world, allBodies);
+  }, [])
 
   return (
     <div className="App">
@@ -133,16 +117,14 @@ function App() {
           pointerEvents: 'none',
         }}>xxx</div>
         <div
-          onClick={handleClick}
           ref={boxRef}
           style={{
             width,
-            height: 500,
+            // height: 500,
           }}
         >
           <canvas ref={canvasRef} />
         </div>
-        frame
       </div>
     </div >
   );
