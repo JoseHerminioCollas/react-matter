@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import MatterDOM, { strm$ } from './MatterDOM';
+import MatterDOM from './MatterDOM';
+import matterMotor from './matterMotor';
 import './App.css';
 
 const width = document.body.clientWidth;
@@ -9,11 +10,12 @@ function App() {
   const [l, setL] = useState(200);
   const [t, setT] = useState(100);
   useEffect(() => {
-    strm$.subscribe(([x, y]) => {
-      setL(x);
-      setT(y);
-    });
+    matterMotor.listen((coords: number[]) => {
+      setL(coords[0]);
+      setT(coords[1]);
+    })
   }, []);
+
   return (
     <div className="App">
       <div
@@ -25,9 +27,10 @@ function App() {
           background: 'green',
         }}
       >
-        <MatterDOM 
+        <MatterDOM
           width={width}
           height={height}
+          matterMotor={matterMotor}
         />
         <div style={{
           position: 'absolute',

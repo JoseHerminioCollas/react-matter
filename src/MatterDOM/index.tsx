@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Matter, { Runner } from 'matter-js';
-import { BehaviorSubject } from 'rxjs';
 import bodies from './bodies';
 
 const {
@@ -11,10 +10,8 @@ const {
   MouseConstraint,
   Events
 } = Matter;
-const strm$ = new BehaviorSubject([0, 0]);
-export { strm$ };
 
-function MatterDOM({ width, height }: any) {
+function MatterDOM({ width, height, matterMotor }: any) {
   const { floor, ball, stack, stack2, wall, wallB } = bodies(width, height);
   const boxRef = useRef(null);
   const canvasRef = useRef(null);
@@ -49,7 +46,7 @@ function MatterDOM({ width, height }: any) {
     });
     Events.on(engine, "afterUpdate", (e) => {
       const { x, y } = e.source.world.bodies[1].bounds.min;
-      strm$.next([x, y]);
+      matterMotor.emit(1, [x, y])
     });
     Composite.add(engine.world, mouseConstraint);
     Composite.add(engine.world, [floor, ball, stack, stack2, wall, wallB]);
