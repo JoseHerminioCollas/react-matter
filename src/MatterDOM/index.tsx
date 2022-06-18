@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Matter, { Runner } from 'matter-js';
+import { BehaviorSubject } from 'rxjs';
 import { floor, ball, stack, stack2, wall, wallB } from './bodies';
 
 const width = document.body.clientWidth;
@@ -12,6 +13,8 @@ const {
   MouseConstraint,
   Events
 } = Matter;
+const strm$ = new BehaviorSubject([0, 0]);
+export { strm$ };
 
 function MatterDOM() {
   const [l, setL] = useState(200);
@@ -22,6 +25,7 @@ function MatterDOM() {
     setL(coords.x);
     setT(coords.y);
   };
+
   useEffect(() => {
     const engine = Engine.create(undefined)
     const render = Render.create({
@@ -52,6 +56,7 @@ function MatterDOM() {
     });
     Events.on(engine, "afterUpdate", (e) => {
       const { x, y } = e.source.world.bodies[1].bounds.min;
+      strm$.next([x, y]);
       appEngine({ x, y })
     });
     Composite.add(engine.world, mouseConstraint);
@@ -62,30 +67,9 @@ function MatterDOM() {
 
   return (
     <div
-      id="frame"
-      style={{
-        position: 'absolute',
-        width: '100%',
-        height: '100%',
-        background: 'red',
-      }}
+      ref={boxRef}
     >
-      <div style={{
-        position: 'absolute',
-        left: l,
-        top: t,
-        fontSize: 120,
-        pointerEvents: 'none',
-      }}>xxx</div>
-      <div
-        ref={boxRef}
-        style={{
-          width,
-          // height: 500,
-        }}
-      >
-        <canvas ref={canvasRef} />
-      </div>
+      <canvas ref={canvasRef} />
     </div>
   );
 }
