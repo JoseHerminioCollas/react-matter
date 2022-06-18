@@ -1,10 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Matter, { Runner } from 'matter-js';
 import { BehaviorSubject } from 'rxjs';
-import { floor, ball, stack, stack2, wall, wallB } from './bodies';
+import bodies from './bodies';
 
-const width = document.body.clientWidth;
-const height = window.screen.height;
 const {
   Engine,
   Render,
@@ -16,15 +14,10 @@ const {
 const strm$ = new BehaviorSubject([0, 0]);
 export { strm$ };
 
-function MatterDOM() {
-  const [l, setL] = useState(200);
-  const [t, setT] = useState(100);
+function MatterDOM({ width, height }: any) {
+  const { floor, ball, stack, stack2, wall, wallB } = bodies(width, height);
   const boxRef = useRef(null);
   const canvasRef = useRef(null);
-  const appEngine = (coords: any) => {
-    setL(coords.x);
-    setT(coords.y);
-  };
 
   useEffect(() => {
     const engine = Engine.create(undefined)
@@ -57,7 +50,6 @@ function MatterDOM() {
     Events.on(engine, "afterUpdate", (e) => {
       const { x, y } = e.source.world.bodies[1].bounds.min;
       strm$.next([x, y]);
-      appEngine({ x, y })
     });
     Composite.add(engine.world, mouseConstraint);
     Composite.add(engine.world, [floor, ball, stack, stack2, wall, wallB]);

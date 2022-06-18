@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import MatterDOM, { strm$ } from './MatterDOM';
 import './App.css';
 
+const width = document.body.clientWidth;
+const height = window.screen.height;
+
 function App() {
   const [l, setL] = useState(200);
   const [t, setT] = useState(100);
@@ -22,7 +25,10 @@ function App() {
           background: 'green',
         }}
       >
-        <MatterDOM />
+        <MatterDOM 
+          width={width}
+          height={height}
+        />
         <div style={{
           position: 'absolute',
           left: l,
