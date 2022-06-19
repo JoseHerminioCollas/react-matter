@@ -8,7 +8,8 @@ const {
   Composite,
   Mouse,
   MouseConstraint,
-  Events
+  Events,
+  Body,
 } = Matter;
 
 function MatterDOM({ width, height, matterMotor }: any) {
@@ -38,11 +39,13 @@ function MatterDOM({ width, height, matterMotor }: any) {
       mouse,
       constraint
     });
-    Events.on(mouseConstraint, 'mousedown', () => {
-      Composite.scale(stack2, 1.1, 1.1, {
-        x: 0,
-        y: 0
-      });
+    Events.on(mouseConstraint, 'mousedown', (e: any) => {
+      const mousePosition = e.mouse.position;
+      const bodies = Composite.allBodies(engine.world)
+      const matchedBodies = Matter.Query.point(bodies, mousePosition)
+      if (matchedBodies.length > 0 && matchedBodies[0].label === 'Circle Body') {
+        Body.scale(matchedBodies[0], 1.1, 1.1);
+      }
     });
     Events.on(engine, "afterUpdate", (e) => {
       const bodies = e.source.world.composites[0].bodies
@@ -55,7 +58,7 @@ function MatterDOM({ width, height, matterMotor }: any) {
       matterMotor.emit(emitBodies)
     });
     Composite.add(engine.world, mouseConstraint);
-    Composite.add(engine.world, [floor, ball, stack, stack2, wall, wallB]);
+    Composite.add(engine.world, [floor, stack, wall, wallB]);
     Runner.run(engine);
     Render.run(render);
   }, [])
