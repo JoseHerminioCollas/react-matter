@@ -39,9 +39,21 @@ function App() {
               position: 'absolute',
               left: e.x,
               top: e.y,
+              width: e.width,
+              height: e.height,
+              border: '1px solid red',
               pointerEvents: 'none',
+              overflow: 'hidden',
+              borderRadius: '50px'
             }}
-          >{e.id}</div>;
+          >
+            <h3>{e.id}</h3>
+            <p
+              style={{ padding: 0 }}
+            >
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto doloribus blanditiis, voluptatibus hic deleniti fugit, debitis mollitia impedit corrupti, recusandae voluptas soluta et aliquam odio veritatis facere maxime dolorem culpa! ;
+            </p>
+          </div>
         })
       }
     </div>

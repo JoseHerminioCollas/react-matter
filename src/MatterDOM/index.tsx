@@ -16,12 +16,11 @@ function MatterDOM({ width, height, matterMotor }: any) {
   const { floor, ball, stack, stack2, wall, wallB } = bodies(width, height);
   const boxRef = useRef(null);
   const canvasRef = useRef(null);
-
+  const engine = Engine.create(undefined)
   useEffect(() => {
-    const engine = Engine.create(undefined)
     const render = Render.create({
       element: boxRef.current ? boxRef.current : undefined,
-      engine: engine,
+      engine,
       canvas: canvasRef.current ? canvasRef.current : undefined,
       options: {
         width,
@@ -44,15 +43,22 @@ function MatterDOM({ width, height, matterMotor }: any) {
       const bodies = Composite.allBodies(engine.world)
       const matchedBodies = Matter.Query.point(bodies, mousePosition)
       if (matchedBodies.length > 0 && matchedBodies[0].label === 'Circle Body') {
-        Body.scale(matchedBodies[0], 1.1, 1.1);
+        if (matchedBodies[0].circleRadius && matchedBodies[0].circleRadius < 50) {
+          Body.scale(matchedBodies[0], 2, 2);
+        }
+        else {
+          Body.scale(matchedBodies[0], 0.5, 0.5);
+        }
       }
     });
     Events.on(engine, "afterUpdate", (e) => {
       const bodies = e.source.world.composites[0].bodies
       const emitBodies = bodies.map((e: any) => ({
         id: e.id,
-        x: e.position.x,
-        y: e.position.y,
+        x: e.bounds.min.x,
+        y: e.bounds.min.y,
+        width: e.bounds.max.x - e.bounds.min.x,
+        height: e.bounds.max.y - e.bounds.min.y,
       }
       ));
       matterMotor.emit(emitBodies)
