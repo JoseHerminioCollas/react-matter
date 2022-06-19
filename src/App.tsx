@@ -34,6 +34,7 @@ function App() {
       {bodies && bodies
         .map((e: any) => {
           return <div
+            key={e.id}
             style={{
               position: 'absolute',
               left: e.x,
