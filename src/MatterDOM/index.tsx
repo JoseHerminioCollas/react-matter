@@ -45,8 +45,14 @@ function MatterDOM({ width, height, matterMotor }: any) {
       });
     });
     Events.on(engine, "afterUpdate", (e) => {
-      const { x, y } = e.source.world.bodies[1].bounds.min;
-      matterMotor.emit(1, [x, y])
+      const bodies = e.source.world.composites[0].bodies
+      const emitBodies = bodies.map((e: any) => ({
+        id: e.id,
+        x: e.position.x,
+        y: e.position.y,
+      }
+      ));
+      matterMotor.emit(emitBodies)
     });
     Composite.add(engine.world, mouseConstraint);
     Composite.add(engine.world, [floor, ball, stack, stack2, wall, wallB]);

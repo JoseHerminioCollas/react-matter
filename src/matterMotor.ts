@@ -1,16 +1,16 @@
 import { BehaviorSubject, interval } from 'rxjs';
 import { throttle } from 'rxjs/operators';
 
-const strm$ = new BehaviorSubject([0, 0]);
+const strm$ = new BehaviorSubject([{id: 100, x:20, y:20}]);
 export { strm$ };
 
 const matterMotor = {
-  emit: (id: number, coords: number[]) => {
-    strm$.next(coords)
+  emit: (bodies: any) => {
+    strm$.next(bodies)
   },
   listen: (cb: any) => {
     strm$
-      .pipe(throttle(val => interval(500)))
+      .pipe(throttle(val => interval(50)))
       .subscribe(coords => {
         cb(coords)
       })

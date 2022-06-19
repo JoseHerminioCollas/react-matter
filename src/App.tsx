@@ -7,12 +7,10 @@ const width = document.body.clientWidth;
 const height = window.screen.height;
 
 function App() {
-  const [l, setL] = useState(200);
-  const [t, setT] = useState(100);
+  const [bodies, setBodies] = useState<any>(null);
   useEffect(() => {
-    matterMotor.listen((coords: number[]) => {
-      setL(coords[0]);
-      setT(coords[1]);
+    matterMotor.listen((bodies: any) => {
+      setBodies(bodies);
     })
   }, []);
 
@@ -32,14 +30,19 @@ function App() {
           height={height}
           matterMotor={matterMotor}
         />
-        <div style={{
-          position: 'absolute',
-          left: l,
-          top: t,
-          fontSize: 120,
-          pointerEvents: 'none',
-        }}>ABC</div>
       </div>
+      {bodies && bodies
+        .map((e: any) => {
+          return <div
+            style={{
+              position: 'absolute',
+              left: e.x,
+              top: e.y,
+              pointerEvents: 'none',
+            }}
+          >{e.id}</div>;
+        })
+      }
     </div>
   );
 }
