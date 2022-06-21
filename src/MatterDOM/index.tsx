@@ -32,13 +32,13 @@ function MatterDOM({ width, height, matterMotor }: any) {
       restitution: 0.9,
       render: {
         fillStyle: color,
+        lineWidth: 12,
       },
     })
     return ballB;
   })
-  const balls = allBalls;
-  const c = Composite.create({});
-  Composite.add(c, balls);
+  const ballComposite = Composite.create({});
+  Composite.add(ballComposite, allBalls);
   const floorC = Bodies.rectangle(width / 2, 12, width, 20, {
     isStatic: true,
     render: {
@@ -84,8 +84,19 @@ function MatterDOM({ width, height, matterMotor }: any) {
         }
       }
     });
+    const boundsA = Matter.Bounds.create([{ x: 0, y: 0 }, { x: width, y: height }])
     Events.on(engine, "afterUpdate", (e) => {
-      const emitBodies = c.bodies.map((e: any) => ({
+      ballComposite.bodies.forEach(body => {
+        const isInside = Matter.Bounds.contains(boundsA, body.position)
+        // Matter.Body.setPosition(body, { x: 100, y: 100 });
+        // // console.log('a', isInside);
+        if (!isInside) {
+          Matter.Body.setPosition(body, { x: 100, y: 100 });
+          // console.log('a', body.position);
+          // Matter.Body.translate(body, { x: 50, y: 50 });
+        }
+      })
+      const emitBodies = ballComposite.bodies.map((e: any) => ({
         id: e.id,
         x: e.bounds.min.x,
         y: e.bounds.min.y,
@@ -96,7 +107,7 @@ function MatterDOM({ width, height, matterMotor }: any) {
       matterMotor.emit(emitBodies)
     });
     Composite.add(engine.world, mouseConstraint);
-    Composite.add(engine.world, [floor, floorC, c, wall, wallB]);
+    Composite.add(engine.world, [floor, floorC, ballComposite, wall, wallB]);
     Runner.run(engine);
     Render.run(render);
   }, [])
