@@ -32,8 +32,9 @@ function App() {
         />
       </div>
       {bodies && bodies
-        .map((e: any) => {
+        .map((e: any, i: number) => {
           return <div
+            tabIndex={i}
             key={e.id}
             style={{
               position: 'absolute',
