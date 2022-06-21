@@ -23,9 +23,10 @@ function MatterDOM({ width, height, matterMotor }: any) {
   })
   const allBalls = [...Array(100)].map((e, i) => {
     const x = (i * 50) % 900;
-    const y = Math.floor(i / 15) * 150 + 90;
+    const y = Math.floor(i / 15) * 15 + 90;
     const size = i === 3 ? 80 : 40;
-    const color = i === 3 ? 'red' : 'green';
+    const rand = Math.round(Math.random() * 10)
+    const color = i === 3 ? '#fff' : `#${rand}c${rand}`;
     const ballB = Bodies.circle(x, y, size, {
       id: i,
       restitution: 0.9,

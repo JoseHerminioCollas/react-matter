@@ -41,10 +41,10 @@ function App() {
               top: e.y,
               width: e.width,
               height: e.height,
-              border: '1px solid red',
+              border: '1px solid #ccc',
               pointerEvents: 'none',
               overflow: 'hidden',
-              borderRadius: '50px'
+              borderRadius: '50%'
             }}
           >
             <h3>{e.id}</h3>
