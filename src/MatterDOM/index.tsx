@@ -10,13 +10,45 @@ const {
   MouseConstraint,
   Events,
   Body,
+  Bodies,
 } = Matter;
 
 function MatterDOM({ width, height, matterMotor }: any) {
   const { floor, ball, stack, stack2, wall, wallB } = bodies(width, height);
+  const ballB = Bodies.circle(150, 0, 100, {
+    restitution: 0.9,
+    render: {
+      fillStyle: 'red',
+    },
+  })
+  const allBalls = [...Array(100)].map((e, i) => {
+    const x = (i * 50) % 900;
+    const y = Math.floor(i / 15) * 150 + 90;
+    const size = i === 3 ? 80 : 40;
+    const color = i === 3 ? 'red' : 'green';
+    const ballB = Bodies.circle(x, y, size, {
+      id: i,
+      restitution: 0.9,
+      render: {
+        fillStyle: color,
+      },
+    })
+    return ballB;
+  })
+  const balls = allBalls;
+  const c = Composite.create({});
+  Composite.add(c, balls);
+  const floorC = Bodies.rectangle(width / 2, 12, width, 20, {
+    isStatic: true,
+    render: {
+      fillStyle: 'blue',
+    },
+  })
   const boxRef = useRef(null);
   const canvasRef = useRef(null);
-  const engine = Engine.create(undefined)
+  const engine = Engine.create({
+    gravity: { x: 0.1, y: 0.1 },
+  })
   useEffect(() => {
     const render = Render.create({
       element: boxRef.current ? boxRef.current : undefined,
@@ -52,8 +84,7 @@ function MatterDOM({ width, height, matterMotor }: any) {
       }
     });
     Events.on(engine, "afterUpdate", (e) => {
-      const bodies = e.source.world.composites[0].bodies
-      const emitBodies = bodies.map((e: any) => ({
+      const emitBodies = c.bodies.map((e: any) => ({
         id: e.id,
         x: e.bounds.min.x,
         y: e.bounds.min.y,
@@ -64,7 +95,7 @@ function MatterDOM({ width, height, matterMotor }: any) {
       matterMotor.emit(emitBodies)
     });
     Composite.add(engine.world, mouseConstraint);
-    Composite.add(engine.world, [floor, stack, wall, wallB]);
+    Composite.add(engine.world, [floor, floorC, c, wall, wallB]);
     Runner.run(engine);
     Render.run(render);
   }, [])

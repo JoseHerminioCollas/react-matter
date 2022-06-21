@@ -3,8 +3,8 @@ import MatterDOM from './MatterDOM';
 import matterMotor from './matterMotor';
 import './App.css';
 
-const width = document.body.clientWidth;
-const height = window.screen.height;
+const width = window.innerWidth - 30;
+const height = window.innerHeight - 30;
 
 function App() {
   const [bodies, setBodies] = useState<any>(null);
