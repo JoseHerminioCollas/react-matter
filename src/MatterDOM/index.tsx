@@ -13,29 +13,19 @@ const {
   Bodies,
 } = Matter;
 
-function MatterDOM({ width, height, matterMotor }: any) {
-  const { floor, ball, stack, stack2, wall, wallB } = bodies(width, height);
-  const ballB = Bodies.circle(150, 0, 100, {
-    restitution: 0.9,
-    render: {
-      fillStyle: 'red',
-    },
-  })
-  const allBalls = [...Array(100)].map((e, i) => {
-    const x = (i * 50) % 900;
-    const y = Math.floor(i / 15) * 15 + 90;
-    const size = i === 3 ? 80 : 40;
-    const rand = Math.round(Math.random() * 10)
-    const color = i === 3 ? '#fff' : `#${rand}c${rand}`;
-    const ballB = Bodies.circle(x, y, size, {
-      id: i,
+function MatterDOM({ width, height, matterMotor, config }: any) {
+  const { floor, wall, wallB } = bodies(width, height);
+  const allBalls = config.map((e: {
+    id: any, label: string, x: number, y: number, size: number, color: string, lineWidth: any,
+  }) => {
+    return Bodies.circle(e.x, e.y, e.size, {
+      id: e.id,
       restitution: 0.9,
       render: {
-        fillStyle: color,
-        lineWidth: 12,
+        fillStyle: e.color,
+        lineWidth: e.lineWidth,
       },
     })
-    return ballB;
   })
   const ballComposite = Composite.create({});
   Composite.add(ballComposite, allBalls);
