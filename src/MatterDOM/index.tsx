@@ -13,7 +13,9 @@ const {
   Bodies,
 } = Matter;
 
-function MatterDOM({ width, height, matterMotor, config, focusId, focusId$ }: {
+function MatterDOM({
+  width, height, matterMotor, config, focusId, focusId$,
+}: {
   width: number,
   height: number,
   matterMotor: any,
@@ -24,16 +26,14 @@ function MatterDOM({ width, height, matterMotor, config, focusId, focusId$ }: {
   const { floor, wall, wallB } = bodies(width, height);
   const allBalls = config.map((e: {
     id: any, label: string, x: number, y: number, size: number, color: string, lineWidth: any,
-  }) => {
-    return Bodies.circle(e.x, e.y, e.size, {
-      id: e.id,
-      restitution: 0.9,
-      render: {
-        fillStyle: e.color,
-        lineWidth: e.lineWidth,
-      },
-    })
-  })
+  }) => Bodies.circle(e.x, e.y, e.size, {
+    id: e.id,
+    restitution: 0.9,
+    render: {
+      fillStyle: e.color,
+      lineWidth: e.lineWidth,
+    },
+  }));
   const ballComposite = Composite.create({});
   Composite.add(ballComposite, allBalls);
   const floorC = Bodies.rectangle(width / 2, 12, width, 20, {
@@ -41,12 +41,12 @@ function MatterDOM({ width, height, matterMotor, config, focusId, focusId$ }: {
     render: {
       fillStyle: 'blue',
     },
-  })
+  });
   const boxRef = useRef(null);
   const canvasRef = useRef(null);
   const engine = Engine.create({
     gravity: { x: 0.1, y: 0.1 },
-  })
+  });
   useEffect(() => {
     focusId$.subscribe((id: number) => {
       // TODO add onBlur$
@@ -58,7 +58,7 @@ function MatterDOM({ width, height, matterMotor, config, focusId, focusId$ }: {
       const focusBall: any = Composite.get(ballComposite, id, 'body');
       focusBall.render.fillStyle = '#fff';
       Body.scale(focusBall, 2, 2);
-    })
+    });
     const render = Render.create({
       element: boxRef.current ? boxRef.current : undefined,
       engine,
@@ -73,36 +73,35 @@ function MatterDOM({ width, height, matterMotor, config, focusId, focusId$ }: {
     const mouse = Mouse.create(render.canvas);
     const constraint: any = {
       stiffness: 0.2,
-      render: { visible: false }
+      render: { visible: false },
     };
     const mouseConstraint = MouseConstraint.create(engine, {
       mouse,
-      constraint
+      constraint,
     });
     Events.on(mouseConstraint, 'mousedown', (e: any) => {
       const mousePosition = e.mouse.position;
-      const bodies = Composite.allBodies(engine.world)
-      const matchedBodies = Matter.Query.point(bodies, mousePosition)
+      const bodies = Composite.allBodies(engine.world);
+      const matchedBodies = Matter.Query.point(bodies, mousePosition);
       if (matchedBodies.length > 0 && matchedBodies[0].label === 'Circle Body') {
         if (matchedBodies[0].circleRadius && matchedBodies[0].circleRadius < 50) {
           Body.set(matchedBodies[0], 2, 2);
           matchedBodies[0].render.fillStyle = '#fff'; // TODO highlightColor
           Body.scale(matchedBodies[0], 2, 2);
-        }
-        else {
+        } else {
           Body.scale(matchedBodies[0], 0.5, 0.5);
         }
       }
     });
-    const boundsA = Matter.Bounds.create([{ x: 0, y: 0 }, { x: width, y: height }])
-    Events.on(engine, "afterUpdate", (e) => {
-      ballComposite.bodies.forEach(body => {
-        const isInside = Matter.Bounds.contains(boundsA, body.position)
+    const boundsA = Matter.Bounds.create([{ x: 0, y: 0 }, { x: width, y: height }]);
+    Events.on(engine, 'afterUpdate', (e) => {
+      ballComposite.bodies.forEach((body) => {
+        const isInside = Matter.Bounds.contains(boundsA, body.position);
         if (!isInside) {
           // TODO find a random position to place the body
           Matter.Body.setPosition(body, { x: 100, y: 100 });
         }
-      })
+      });
       const emitBodies = ballComposite.bodies.map((e: any) => ({
         id: e.id,
         x: e.bounds.min.x,
@@ -111,13 +110,13 @@ function MatterDOM({ width, height, matterMotor, config, focusId, focusId$ }: {
         height: e.bounds.max.y - e.bounds.min.y,
       }
       ));
-      matterMotor.emit(emitBodies)
+      matterMotor.emit(emitBodies);
     });
     Composite.add(engine.world, mouseConstraint);
     Composite.add(engine.world, [floor, floorC, ballComposite, wall, wallB]);
     Runner.run(engine);
     Render.run(render);
-  }, [])
+  }, []);
 
   return (
     <div

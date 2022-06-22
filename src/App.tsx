@@ -12,7 +12,7 @@ const config = [...Array(100)].map((e, i) => {
   const x = (i * 50) % 900;
   const y = Math.floor(i / 15) * 15 + 90;
   const size = 40;
-  const rand = Math.round(Math.random() * 5 + 10).toString(16)
+  const rand = Math.round(Math.random() * 5 + 10).toString(16);
   const color = `#${rand}${rand}${rand}`;
   return {
     id: i,
@@ -22,17 +22,16 @@ const config = [...Array(100)].map((e, i) => {
     y,
     size,
     color,
-    lineWidth: 2
-  }
-
-})
+    lineWidth: 2,
+  };
+});
 function App() {
   const [bodies, setBodies] = useState<any>(null);
   const [focusId, setFocusId] = useState<number | null>(null);
   useEffect(() => {
     matterMotor.listen((bodies: any) => {
       setBodies(bodies);
-    })
+    });
   }, []);
 
   return (
@@ -45,7 +44,7 @@ function App() {
           height: '100%',
           background: 'green',
         }}
-        >
+      >
         <MatterDOM
           width={width}
           height={height}
@@ -57,39 +56,40 @@ function App() {
       </div>
       {bodies && bodies
         .map((e: any, i: number) => {
-          const configElement = config.find(eC => eC.id === e.id);
+          const configElement = config.find((eC) => eC.id === e.id);
           const text = configElement?.text;
           const name = configElement?.name;
 
-          return <div
-            className='matter-dom'
-            tabIndex={i}
-            key={e.id}
-            onFocus={(evnt) => focusId$.next(e.id)}
+          return (
+            <div
+              className="matter-dom"
+              tabIndex={i}
+              key={e.id}
+              onFocus={(evnt) => focusId$.next(e.id)}
             // onFocus={(evnt) => setFocusId(e.id)}
             // onFocus={(evnt) => evnt.target.style.background = 'green'}
             // onBlur={(evnt) => evnt.target.style.background = 'red'}
-            style={{
-              position: 'absolute',
-              left: e.x,
-              top: e.y,
-              width: e.width,
-              height: e.height,
-              pointerEvents: 'none',
-              overflow: 'hidden',
-              // border: '1px solid',
-              borderRadius: '50%'
-            }}
-          >
-            <h3>{name}</h3>
-            <p
-              style={{ padding: 0 }}
+              style={{
+                position: 'absolute',
+                left: e.x,
+                top: e.y,
+                width: e.width,
+                height: e.height,
+                pointerEvents: 'none',
+                overflow: 'hidden',
+                // border: '1px solid',
+                borderRadius: '50%',
+              }}
             >
-              {text}
-            </p>
-          </div>
-        })
-      }
+              <h3>{name}</h3>
+              <p
+                style={{ padding: 0 }}
+              >
+                {text}
+              </p>
+            </div>
+          );
+        })}
     </div>
   );
 }
