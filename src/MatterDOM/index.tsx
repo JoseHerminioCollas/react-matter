@@ -13,7 +13,14 @@ const {
   Bodies,
 } = Matter;
 
-function MatterDOM({ width, height, matterMotor, config }: any) {
+function MatterDOM({ width, height, matterMotor, config, focusId, focusId$ }: {
+  width: number,
+  height: number,
+  matterMotor: any,
+  config: any,
+  focusId: number | null,
+  focusId$: any
+}) {
   const { floor, wall, wallB } = bodies(width, height);
   const allBalls = config.map((e: {
     id: any, label: string, x: number, y: number, size: number, color: string, lineWidth: any,
@@ -41,6 +48,17 @@ function MatterDOM({ width, height, matterMotor, config }: any) {
     gravity: { x: 0.1, y: 0.1 },
   })
   useEffect(() => {
+    focusId$.subscribe((id: number) => {
+      // TODO add onBlur$
+      if (id !== 0) {
+        const focusBall2: any = Composite.get(ballComposite, id - 1, 'body');
+        focusBall2.render.fillStyle = config[id].color;
+        Body.scale(focusBall2, 0.5, 0.5);
+      }
+      const focusBall: any = Composite.get(ballComposite, id, 'body');
+      focusBall.render.fillStyle = '#fff';
+      Body.scale(focusBall, 2, 2);
+    })
     const render = Render.create({
       element: boxRef.current ? boxRef.current : undefined,
       engine,
@@ -48,7 +66,7 @@ function MatterDOM({ width, height, matterMotor, config }: any) {
       options: {
         width,
         height,
-        background: '#ccc',
+        background: '#777',
         wireframes: false,
       },
     });
@@ -67,6 +85,8 @@ function MatterDOM({ width, height, matterMotor, config }: any) {
       const matchedBodies = Matter.Query.point(bodies, mousePosition)
       if (matchedBodies.length > 0 && matchedBodies[0].label === 'Circle Body') {
         if (matchedBodies[0].circleRadius && matchedBodies[0].circleRadius < 50) {
+          Body.set(matchedBodies[0], 2, 2);
+          matchedBodies[0].render.fillStyle = '#fff'; // TODO highlightColor
           Body.scale(matchedBodies[0], 2, 2);
         }
         else {

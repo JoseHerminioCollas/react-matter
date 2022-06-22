@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react';
 import MatterDOM from './MatterDOM';
 import matterMotor from './matterMotor';
 import './App.css';
+import { BehaviorSubject } from 'rxjs';
 
+const focusId$ = new BehaviorSubject(null);
 const width = window.innerWidth - 30;
 const height = window.innerHeight - 30;
 // config data, generate bodies from this config data
@@ -10,7 +12,7 @@ const config = [...Array(100)].map((e, i) => {
   const x = (i * 50) % 900;
   const y = Math.floor(i / 15) * 15 + 90;
   const size = 40;
-  const rand = Math.round(Math.random() * 10 + 5).toString(16)
+  const rand = Math.round(Math.random() * 5 + 10).toString(16)
   const color = `#${rand}${rand}${rand}`;
   return {
     id: i,
@@ -26,6 +28,7 @@ const config = [...Array(100)].map((e, i) => {
 })
 function App() {
   const [bodies, setBodies] = useState<any>(null);
+  const [focusId, setFocusId] = useState<number | null>(null);
   useEffect(() => {
     matterMotor.listen((bodies: any) => {
       setBodies(bodies);
@@ -42,12 +45,14 @@ function App() {
           height: '100%',
           background: 'green',
         }}
-      >
+        >
         <MatterDOM
           width={width}
           height={height}
           matterMotor={matterMotor}
           config={config}
+          focusId={focusId}
+          focusId$={focusId$}
         />
       </div>
       {bodies && bodies
@@ -57,17 +62,22 @@ function App() {
           const name = configElement?.name;
 
           return <div
+            className='matter-dom'
             tabIndex={i}
             key={e.id}
+            onFocus={(evnt) => focusId$.next(e.id)}
+            // onFocus={(evnt) => setFocusId(e.id)}
+            // onFocus={(evnt) => evnt.target.style.background = 'green'}
+            // onBlur={(evnt) => evnt.target.style.background = 'red'}
             style={{
               position: 'absolute',
-              left: e.x + 13,
+              left: e.x,
               top: e.y,
               width: e.width,
               height: e.height,
               pointerEvents: 'none',
               overflow: 'hidden',
-              border: '1px solid',
+              // border: '1px solid',
               borderRadius: '50%'
             }}
           >

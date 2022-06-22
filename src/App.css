@@ -5,3 +5,6 @@
 body {
   overflow: hidden;
 }
+.matter-dom:focus {
+  outline: none;
+}
