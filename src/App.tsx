@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import { BehaviorSubject } from 'rxjs';
 import MatterDOM from './MatterDOM';
 import matterMotor from './matterMotor';
 import './App.css';
-import { BehaviorSubject } from 'rxjs';
 
 const focusId$ = new BehaviorSubject(null);
 const width = window.innerWidth - 30;
@@ -27,10 +27,9 @@ const config = [...Array(100)].map((e, i) => {
 });
 function App() {
   const [bodies, setBodies] = useState<any>(null);
-  const [focusId, setFocusId] = useState<number | null>(null);
   useEffect(() => {
-    matterMotor.listen((bodies: any) => {
-      setBodies(bodies);
+    matterMotor.listen((matterMotorBodies: any) => {
+      setBodies(matterMotorBodies);
     });
   }, []);
 
@@ -50,7 +49,6 @@ function App() {
           height={height}
           matterMotor={matterMotor}
           config={config}
-          focusId={focusId}
           focusId$={focusId$}
         />
       </div>
@@ -65,10 +63,7 @@ function App() {
               className="matter-dom"
               tabIndex={i}
               key={e.id}
-              onFocus={(evnt) => focusId$.next(e.id)}
-            // onFocus={(evnt) => setFocusId(e.id)}
-            // onFocus={(evnt) => evnt.target.style.background = 'green'}
-            // onBlur={(evnt) => evnt.target.style.background = 'red'}
+              onFocus={() => focusId$.next(e.id)}
               style={{
                 position: 'absolute',
                 left: e.x,

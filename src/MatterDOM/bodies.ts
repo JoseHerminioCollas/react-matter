@@ -1,8 +1,7 @@
-import Matter, { Runner } from 'matter-js';
+import Matter from 'matter-js';
 
 const {
   Bodies,
-  Composites,
 } = Matter;
 
 export default (width: number, height: number) => {
@@ -24,20 +23,8 @@ export default (width: number, height: number) => {
       fillStyle: 'blue',
     },
   });
-  const ball = Bodies.circle(150, 0, 100, {
-    restitution: 0.9,
-    render: {
-      fillStyle: 'yellow',
-    },
-  });
-  const stack = Composites.stack(0, 0, 10, 10, 0, 0, (x: number, y: number) => Bodies.circle(x, y, 30));
-  const stack2 = Composites.stack(0, 0, 1, 1, 0, 0, (x: number, y: number) => Bodies.circle(x, y, 40, {
-    render: {
-      fillStyle: 'red',
-    },
-  }));
 
   return {
-    floor, ball, stack, stack2, wall, wallB,
+    floor, wall, wallB,
   };
 };

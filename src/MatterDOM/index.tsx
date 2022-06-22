@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import Matter, { Runner } from 'matter-js';
 import bodies from './bodies';
 
@@ -14,13 +14,12 @@ const {
 } = Matter;
 
 function MatterDOM({
-  width, height, matterMotor, config, focusId, focusId$,
+  width, height, matterMotor, config, focusId$,
 }: {
   width: number,
   height: number,
   matterMotor: any,
   config: any,
-  focusId: number | null,
   focusId$: any
 }) {
   const { floor, wall, wallB } = bodies(width, height);
@@ -81,8 +80,10 @@ function MatterDOM({
     });
     Events.on(mouseConstraint, 'mousedown', (e: any) => {
       const mousePosition = e.mouse.position;
-      const bodies = Composite.allBodies(engine.world);
-      const matchedBodies = Matter.Query.point(bodies, mousePosition);
+      const matchedBodies = Matter.Query.point(
+        Composite.allBodies(engine.world),
+        mousePosition,
+      );
       if (matchedBodies.length > 0 && matchedBodies[0].label === 'Circle Body') {
         if (matchedBodies[0].circleRadius && matchedBodies[0].circleRadius < 50) {
           Body.set(matchedBodies[0], 2, 2);
@@ -94,7 +95,7 @@ function MatterDOM({
       }
     });
     const boundsA = Matter.Bounds.create([{ x: 0, y: 0 }, { x: width, y: height }]);
-    Events.on(engine, 'afterUpdate', (e) => {
+    Events.on(engine, 'afterUpdate', () => {
       ballComposite.bodies.forEach((body) => {
         const isInside = Matter.Bounds.contains(boundsA, body.position);
         if (!isInside) {
