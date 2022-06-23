@@ -3,28 +3,30 @@ import { BehaviorSubject } from 'rxjs';
 import MatterDOM from 'MatterDOM';
 import matterMotor from 'matterMotor';
 import 'App.css';
+import data from 'meteor.data';
 
 const focusId$ = new BehaviorSubject(null);
 const width = window.innerWidth - 30;
 const height = window.innerHeight - 30;
-// config data, generate bodies from this config data
-const config = [...Array(100)].map((e, i) => {
-  const x = (i * 50) % 900;
-  const y = Math.floor(i / 15) * 15 + 90;
-  const size = 40;
-  const rand = Math.round(Math.random() * 5 + 10).toString(16);
-  const color = `#${rand}${rand}${rand}`;
-  return {
-    id: i,
-    name: ` ${String(i)} `,
-    text: 'Lorem ipsum dolor sit amet consectetur '.repeat(5),
-    x,
-    y,
-    size,
-    color,
-    lineWidth: 2,
-  };
-});
+const config = data
+  .slice(0, 100)
+  .map((e, i) => {
+    const x = (i * 50) % 900;
+    const y = Math.floor(i / 15) * 15 + 90;
+    const size = 40;
+    const rand = Math.round(Math.random() * 5 + 10).toString(16);
+    const color = `#${rand}${rand}${rand}`;
+    return {
+      id: i,
+      name: e.name,
+      text: e.mass,
+      x,
+      y,
+      size,
+      color,
+      lineWidth: 2,
+    };
+  });
 function App() {
   const [bodies, setBodies] = useState<any>(null);
   useEffect(() => {
@@ -65,6 +67,7 @@ function App() {
               key={e.id}
               onFocus={() => focusId$.next(e.id)}
               style={{
+                fontSize: '0.9em',
                 position: 'absolute',
                 left: e.x,
                 top: e.y,
@@ -72,11 +75,18 @@ function App() {
                 height: e.height,
                 pointerEvents: 'none',
                 overflow: 'hidden',
-                // border: '1px solid',
-                borderRadius: '50%',
+                padding: '0 12px',
+                margin: 0,
+                // borderRadius: '50%',
+                // border: '3px solid blue',
+                // background: 'red',
               }}
             >
-              <h3>{name}</h3>
+              <h3
+                style={{ margin: '18px 0' }}
+              >
+                {name}
+              </h3>
               <p
                 style={{ padding: 0 }}
               >
