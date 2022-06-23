@@ -73,7 +73,9 @@
       "react-app",
       "react-app/jest",
       "airbnb",
-      "airbnb/hooks"
+      "airbnb/hooks",
+      "plugin:@typescript-eslint/eslint-recommended",
+      "plugin:@typescript-eslint/recommended"
     ],
     "rules": {
       "react-hooks/exhaustive-deps": [0],
@@ -160,6 +162,10 @@
     "transformIgnorePatterns": [
       "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs|cjs|ts|tsx)$",
       "^.+\\.module\\.(css|sass|scss)$"
+    ],
+    "moduleDirectories": [
+      "node_modules",
+      "src"
     ],
     "modulePaths": [],
     "moduleNameMapper": {
