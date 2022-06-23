@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { BehaviorSubject } from 'rxjs';
-import MatterDOM from './MatterDOM';
-import matterMotor from './matterMotor';
-import './App.css';
+import MatterDOM from 'MatterDOM';
+import matterMotor from 'matterMotor';
+import 'App.css';
 
 const focusId$ = new BehaviorSubject(null);
 const width = window.innerWidth - 30;

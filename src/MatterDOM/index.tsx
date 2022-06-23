@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import Matter, { Runner } from 'matter-js';
-import bodies from './bodies';
+import bodies from 'MatterDOM/bodies';
 
 const {
   Engine,
