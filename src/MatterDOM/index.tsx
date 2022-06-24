@@ -48,6 +48,7 @@ function MatterDOM({
   });
   useEffect(() => {
     focusId$.subscribe((id: number) => {
+      if (!id) return; // TODO, why is this id null?
       // TODO add onBlur$
       if (id !== 0) {
         const focusBall2: any = Composite.get(ballComposite, id - 1, 'body');
