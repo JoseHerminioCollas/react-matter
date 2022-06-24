@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { BehaviorSubject } from 'rxjs';
+import { mergeStyles } from '@fluentui/react';
+import { initializeIcons } from '@fluentui/font-icons-mdl2';
 import MatterDOM from 'MatterDOM';
 import matterMotor from 'matterMotor';
 import nasaMeteor from 'data-conversion/nasa-meteor';
@@ -10,8 +12,14 @@ const focusId$ = new BehaviorSubject(null);
 const width = window.innerWidth - 30;
 const height = window.innerHeight - 30;
 const config = nasaMeteor(data);
-
+const appStyle = mergeStyles({
+  position: 'absolute',
+  width: '100%',
+  height: '100%',
+  background: '#ccc',
+});
 function App() {
+  initializeIcons();
   const [bodies, setBodies] = useState<any>(null);
   useEffect(() => {
     matterMotor.listen((matterMotorBodies: any) => {
@@ -23,12 +31,7 @@ function App() {
     <div className="App">
       <div
         id="frame"
-        style={{
-          position: 'absolute',
-          width: '100%',
-          height: '100%',
-          background: 'green',
-        }}
+        className={appStyle}
       >
         <MatterDOM
           width={width}
