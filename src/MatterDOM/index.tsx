@@ -22,7 +22,9 @@ function MatterDOM({
   config: any,
   focusId$: any
 }) {
-  const { floor, wall, wallB } = bodies(width, height);
+  const {
+    floor, floorC, wall, wallB,
+  } = bodies(width, height);
   const allBalls = config.map((e: {
     id: any, label: string, x: number, y: number, size: number, color: string, lineWidth: any,
   }) => Bodies.circle(e.x, e.y, e.size, {
@@ -35,12 +37,6 @@ function MatterDOM({
   }));
   const ballComposite = Composite.create({});
   Composite.add(ballComposite, allBalls);
-  const floorC = Bodies.rectangle(width / 2, 12, width, 20, {
-    isStatic: true,
-    render: {
-      fillStyle: 'blue',
-    },
-  });
   const boxRef = useRef(null);
   const canvasRef = useRef(null);
   const engine = Engine.create({
