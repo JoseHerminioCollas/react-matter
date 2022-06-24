@@ -49,7 +49,7 @@ const config = data
       lineWidth: 2,
     };
   });
-console.log(config);
+
 function App() {
   const [bodies, setBodies] = useState<any>(null);
   useEffect(() => {
