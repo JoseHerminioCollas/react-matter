@@ -12,7 +12,7 @@ const matterMotor = {
   },
   listen: (cb: any) => {
     strm$
-      .pipe(throttle(() => interval(50)))
+      .pipe(throttle(() => interval(10)))
       .subscribe((coords) => {
         cb(coords);
       });
