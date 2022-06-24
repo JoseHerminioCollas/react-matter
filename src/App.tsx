@@ -2,53 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { BehaviorSubject } from 'rxjs';
 import MatterDOM from 'MatterDOM';
 import matterMotor from 'matterMotor';
+import nasaMeteor from 'data-conversion/nasa-meteor';
 import 'App.css';
 import data from 'meteor.data';
 
 const focusId$ = new BehaviorSubject(null);
 const width = window.innerWidth - 30;
 const height = window.innerHeight - 30;
-// data-conversion/nasa-meteor.ts
-const meteorDetails = [
-  'year',
-  'reclat',
-  'reclong',
-  'geolocation',
-];
-const config = data
-  .sort((a: any, b: any) => Number(b.mass) - Number(a.mass))
-  .slice(0, 100)
-  .map((e, i) => {
-    const x = (i * 50) % 900;
-    const y = Math.floor(i / 15) * 15 + 90;
-    const size = (i < 3) ? 80 : 40;
-    const rand = Math.round(Math.random() * 5 + 10).toString(16);
-    const color = `#${rand}${rand}${rand}`;
-
-    return {
-      id: i,
-      name: e.name,
-      mass: `${e.mass} (g)`,
-      details: Object
-        .entries(e)
-        .filter(([k, v]) => meteorDetails.includes(k))
-        .reduce((acc, v) => {
-          const key = v[0];
-          let value = v[1];
-          if (key === 'year') value = new Date(value).toDateString();
-          if (key === 'geolocation') {
-            value = `  ${value.coordinates[0]}, ${value.coordinates[1]}`;
-          }
-          if (key === 'mass') value = `${value} (g)`;
-          return { ...acc, [key]: value };
-        }, {}),
-      x,
-      y,
-      size,
-      color,
-      lineWidth: 2,
-    };
-  });
+const config = nasaMeteor(data);
 
 function App() {
   const [bodies, setBodies] = useState<any>(null);
