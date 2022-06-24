@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { BehaviorSubject } from 'rxjs';
-import { mergeStyles } from '@fluentui/react';
+import { mergeStyles, mergeStyleSets } from '@fluentui/react';
 import { initializeIcons } from '@fluentui/font-icons-mdl2';
 import MatterDOM from 'MatterDOM';
 import matterMotor from 'matterMotor';
 import nasaMeteor from 'data-conversion/nasa-meteor';
-import 'App.css';
 import data from 'meteor.data';
 
 const focusId$ = new BehaviorSubject(null);
@@ -17,7 +16,50 @@ const appStyle = mergeStyles({
   width: '100%',
   height: '100%',
   background: '#ccc',
+  textAlign: 'center',
 });
+const bodiesStyle = mergeStyleSets({
+  container: {
+    fontSize: '0.9em',
+    position: 'absolute',
+    pointerEvents: 'none',
+    overflow: 'hidden',
+    padding: '0 12px',
+    margin: 0,
+    outline: 'none',
+    textAlign: 'center',
+  },
+  header: {
+    display: 'inline-block',
+    margin: '18px 0 0 0',
+    padding: '2px',
+    backgroundColor: 'rgba(220, 220, 220, 0.5)',
+    borderRadius: '10%',
+  },
+  subHeader: {
+    margin: 0,
+    padding: 0,
+    fontWeight: 900,
+  },
+  details: {
+    margin: '0.3em 0.3em',
+    padding: 0,
+    listStyle: 'none',
+    fontWeight: 500,
+  },
+  detail: {
+    display: 'inline-block',
+    padding: 0,
+  },
+  detailBackground: {
+    backgroundColor: 'rgba(255, 255, 255, 0.5)',
+    borderRadius: '10%',
+  },
+  opaque: {
+    opacity: 1.0,
+  },
+});
+
 function App() {
   initializeIcons();
   const [bodies, setBodies] = useState<any>(null);
@@ -28,7 +70,7 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
+    <div>
       <div
         id="frame"
         className={appStyle}
@@ -50,82 +92,47 @@ function App() {
 
           return (
             <div
-              className="matter-dom"
+              className={bodiesStyle.container}
               tabIndex={i}
               key={e.id}
               onFocus={() => focusId$.next(e.id)}
               style={{
-                fontSize: '0.9em',
-                position: 'absolute',
                 left: e.x,
                 top: e.y,
                 width: e.width,
                 height: e.height,
-                pointerEvents: 'none',
-                overflow: 'hidden',
-                padding: '0 12px',
-                margin: 0,
               }}
             >
               <h3
+                className={bodiesStyle.header}
                 style={{
                   fontSize: (name && [...name].length > 8) ? '0.9em' : '1.2em',
-                  display: 'inline-block',
-                  margin: '18px 0 0 0',
-                  padding: '2px',
-                  backgroundColor: 'rgba(220, 220, 220, 0.5)',
-                  borderRadius: '10%',
                 }}
               >
-                <span style={{
-                  opacity: 1.0,
-                }}
-                >
+                <span className={bodiesStyle.opaque}>
                   {name}
                 </span>
               </h3>
-              <h5
-                style={{
-                  margin: 0,
-                  padding: 0,
-                  fontWeight: 900,
-                }}
-              >
+              <h5 className={bodiesStyle.subHeader}>
                 {configElement?.mass}
               </h5>
               <ul
+                className={bodiesStyle.details}
                 style={{
                   display: detailDisplay,
-                  margin: '0.3em 0.3em',
-                  padding: 0,
-                  listStyle: 'none',
-                  fontWeight: 500,
                 }}
               >
                 {configElement
                   && Object
                     .entries(configElement.details)
                     .map(([k, v]: any) => (
-                      <li
-                        style={{
-                          display: 'inline-block',
-                          padding: 0,
-                        }}
-                      >
-                        <em
-                          style={{
-                            backgroundColor: 'rgba(255, 255, 255, 0.5)',
-                            borderRadius: '10%',
-                          }}
-                        >
+                      <li className={bodiesStyle.detail}>
+                        <em className={bodiesStyle.detailBackground}>
                           {k}
                         </em>
                         {' : '}
                         <span
-                          style={{
-                            backgroundColor: 'rgba(255, 255, 255, 0.5)',
-                            borderRadius: '10%',
-                          }}
+                          className={bodiesStyle.detailBackground}
                         >
                           {v}
                         </span>
