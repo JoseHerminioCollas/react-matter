@@ -9,15 +9,14 @@ import nasaMeteor from 'data-conversion/nasa-meteor';
 import data from 'meteor.data';
 
 const focusId$ = new BehaviorSubject(null);
-const width = window.innerWidth - 30;
-const height = window.innerHeight - 30;
+const width = window.innerWidth;
+const height = window.innerHeight - 50;
 const config = nasaMeteor(data);
 const appStyle = mergeStyles({
   position: 'absolute',
   width: '100%',
   height: '100%',
   background: '#ccc',
-  textAlign: 'center',
 });
 
 function App() {
@@ -30,24 +29,30 @@ function App() {
   }, []);
 
   return (
-    <div>
-      <div
-        id="frame"
-        className={appStyle}
-      >
-        <MatterDOM
-          width={width}
-          height={height}
-          matterMotor={matterMotor}
-          config={config}
-          focusId$={focusId$}
-        />
-      </div>
+    <div className={appStyle}>
+      <MatterDOM
+        width={width}
+        height={height}
+        matterMotor={matterMotor}
+        config={config}
+        focusId$={focusId$}
+      />
       <MatterBodies
         bodies={bodies}
         config={config}
         focusId$={focusId$}
       />
+      <div
+        style={{
+          position: 'absolute',
+          bottom: '0',
+          background: '#999',
+          width: '100%',
+          height: '50px',
+        }}
+      >
+        xxx
+      </div>
     </div>
   );
 }

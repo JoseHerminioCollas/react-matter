@@ -8,7 +8,6 @@ const bodiesStyle = mergeStyleSets({
     position: 'absolute',
     pointerEvents: 'none',
     overflow: 'hidden',
-    padding: '0 12px',
     margin: 0,
     outline: 'none',
     textAlign: 'center',
