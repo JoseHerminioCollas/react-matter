@@ -81,7 +81,7 @@ function App() {
                   {name}
                 </span>
               </h3>
-              <p
+              <h5
                 style={{
                   margin: 0,
                   padding: 0,
@@ -89,46 +89,46 @@ function App() {
                 }}
               >
                 {configElement?.mass}
-                <ul
-                  style={{
-                    display: detailDisplay,
-                    margin: 0,
-                    padding: '0.5em 0',
-                    listStyle: 'none',
-                    fontWeight: 500,
-                  }}
-                >
-                  {configElement
-                    && Object
-                      .entries(configElement.details)
-                      .map(([k, v]) => (
-                        <li
+              </h5>
+              <ul
+                style={{
+                  display: detailDisplay,
+                  margin: '0.3em 0.3em',
+                  padding: 0,
+                  listStyle: 'none',
+                  fontWeight: 500,
+                }}
+              >
+                {configElement
+                  && Object
+                    .entries(configElement.details)
+                    .map(([k, v]: any) => (
+                      <li
+                        style={{
+                          display: 'inline-block',
+                          padding: 0,
+                        }}
+                      >
+                        <em
                           style={{
-                            display: 'inline-block',
-                            padding: 0,
+                            backgroundColor: 'rgba(255, 255, 255, 0.5)',
+                            borderRadius: '10%',
                           }}
                         >
-                          <em
-                            style={{
-                              backgroundColor: 'rgba(255, 255, 255, 0.5)',
-                              borderRadius: '10%',
-                            }}
-                          >
-                            {k}
-                          </em>
-                          {' : '}
-                          <span
-                            style={{
-                              backgroundColor: 'rgba(255, 255, 255, 0.5)',
-                              borderRadius: '10%',
-                            }}
-                          >
-                            {`${v}`}
-                          </span>
-                        </li>
-                      ))}
-                </ul>
-              </p>
+                          {k}
+                        </em>
+                        {' : '}
+                        <span
+                          style={{
+                            backgroundColor: 'rgba(255, 255, 255, 0.5)',
+                            borderRadius: '10%',
+                          }}
+                        >
+                          {v}
+                        </span>
+                      </li>
+                    ))}
+              </ul>
             </div>
           );
         })}
