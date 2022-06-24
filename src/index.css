@@ -7,3 +7,27 @@ body {
   -moz-osx-font-smoothing: grayscale;
   overflow: hidden;
 }
+
+.modal-header {
+  background: #ccc;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 0.5em;
+}
+
+.modal-article {
+  background-color: #fff;
+  padding: 1em;
+  margin: 0.5em;
+  border-radius: 1em;
+}
+
+.modal-article a {
+  text-decoration: none;
+}
+
+.modal-article img {
+  display: block;
+  margin: auto;
+}
