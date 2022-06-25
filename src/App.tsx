@@ -81,7 +81,7 @@ function App() {
         }}
       >
         <img src="2d-data.svg" width="40" alt="logo" />
-        <h1>2D Physics Data</h1>
+        <h1>2DPhysics Data</h1>
         &nbsp; &nbsp;Data From&nbsp;: &nbsp;
         <a href="https://data.nasa.gov/Space-Science/Meteorite-Landings/gh4g-9sfh" target="new">Nasa</a>
         &nbsp;&nbsp;
@@ -105,7 +105,10 @@ function App() {
         containerClassName={modalClass}
       >
         <div className="modal-header">
-          <h3>Data Visualization with 2D Physics</h3>
+          <h3>
+            2DPhysics Data:
+            <small> Data Visualization with 2D Physics</small>
+          </h3>
           <FontIcon
             onClick={() => setIsModalOpen(false)}
             aria-label="Close Window"
@@ -116,7 +119,23 @@ function App() {
         <article className="modal-article">
           <img src="2d-data.svg" width="60" alt="logo" />
           The data displayed is 100 of the Heaviest Meteorites from&nbsp;
-          <a href="https://data.nasa.gov/Space-Science/Meteorite-Landings/gh4g-9sfh" target="new">Nasa</a>
+          <a href="https://data.nasa.gov/Space-Science/Meteorite-Landings/gh4g-9sfh" target="new">NASA&apos;s Open Data Portal</a>
+          <p>
+            2DPhysics Data is an exploration of visualizing data with a 2D physics layout.
+          </p>
+          <p>
+            Each data element is represented as a physical body.
+            This physical body can move according to the 2D physics it is simulating.
+            Data details can be shown or hidden by clicking on the body.
+            Tabbing through the elements shows and hides details.
+            The resizing of the data elements results in a reflow of the bodies,
+            ideally laying out the elements in a way that represents the data clearly.
+          </p>
+          <a href="https://github.com/JoseHerminioCollas/react-matter/" target="new">GitHub repository</a>
+          <p>
+            Developed and Designed by&nbsp;
+            <a href="https:/goatstone.com" target="new">Goatstone</a>
+          </p>
         </article>
       </Modal>
     </div>
