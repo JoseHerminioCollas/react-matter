@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { BehaviorSubject } from 'rxjs';
 import { mergeStyles, FontIcon, Modal } from '@fluentui/react';
 import { initializeIcons } from '@fluentui/font-icons-mdl2';
+import axios from 'axios';
 import MatterDOM from 'MatterDOM';
 import MatterBodies from 'MatterBodies';
 import matterMotor from 'matterMotor';
@@ -46,11 +47,20 @@ function App() {
   initializeIcons();
   const [bodies, setBodies] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const [configState, setConfigState] = useState(config);
   useEffect(() => {
     matterMotor.listen((matterMotorBodies: any) => {
       setBodies(matterMotorBodies);
     });
+    setTimeout(() => {
+      // setConfigState([]);
+    }, 3000);
+    axios.get('https://goatstone.com/info')
+      .then((res) => {
+        console.log(res.data.data);
+        // const a = convertFromCMC(res.data.data)
+        // dataStyle.setAll(a)
+      });
   }, []);
 
   return (
@@ -59,12 +69,12 @@ function App() {
         width={width}
         height={height}
         matterMotor={matterMotor}
-        config={config}
+        config={configState}
         focusId$={focusId$}
       />
       <MatterBodies
         bodies={bodies}
-        config={config}
+        config={configState}
         focusId$={focusId$}
       />
       <div
