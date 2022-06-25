@@ -13,7 +13,7 @@ const infoIconClass = mergeStyles({
   fontWeight: 900,
   height: 25,
   width: 25,
-  margin: '0 0.35em',
+  margin: '0 1em',
   cursor: 'pointer',
 });
 const modalClass = mergeStyles({
@@ -80,19 +80,21 @@ function App() {
           padding: '0 0.5em',
         }}
       >
+        <img src="2d-data.svg" width="40" alt="logo" />
+        <h1>2D Physics Data</h1>
+        &nbsp; &nbsp;Data From&nbsp;: &nbsp;
+        <a href="https://data.nasa.gov/Space-Science/Meteorite-Landings/gh4g-9sfh" target="new">Nasa</a>
+        &nbsp;&nbsp;
         <h3
           style={{ display: 'inline' }}
         >
           100 Heaviest Meteorites&nbsp;
-          <a href="https://data.nasa.gov/Space-Science/Meteorite-Landings/gh4g-9sfh" target="new">Nasa data</a>
-          &nbsp;&nbsp;
         </h3>
         <FontIcon
           onClick={() => setIsModalOpen(true)}
           aria-label="Information"
           iconName="info"
           className={infoIconClass}
-          style={{ margin: 0 }}
         />
       </div>
       <Modal
@@ -103,7 +105,7 @@ function App() {
         containerClassName={modalClass}
       >
         <div className="modal-header">
-          <h3>100 Heaviest Meteorites</h3>
+          <h3>Data Visualization with 2D Physics</h3>
           <FontIcon
             onClick={() => setIsModalOpen(false)}
             aria-label="Close Window"
@@ -112,7 +114,9 @@ function App() {
           />
         </div>
         <article className="modal-article">
-          Data Visualization with 2D Physics
+          <img src="2d-data.svg" width="60" alt="logo" />
+          The data displayed is 100 of the Heaviest Meteorites from&nbsp;
+          <a href="https://data.nasa.gov/Space-Science/Meteorite-Landings/gh4g-9sfh" target="new">Nasa</a>
         </article>
       </Modal>
     </div>
