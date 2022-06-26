@@ -4,10 +4,10 @@ import Matter from 'matter-js';
 
 const bodiesStyle = mergeStyleSets({
   container: {
-    fontSize: '0.9em',
+    fontSize: '0.65em',
     position: 'absolute',
     pointerEvents: 'none',
-    overflow: 'hidden',
+    // overflow: 'hidden',
     margin: 0,
     outline: 'none',
     textAlign: 'center',
@@ -80,7 +80,7 @@ const MatterBodies: MatterBodiesI = function ({ bodies, config, focusId$ }) {
                 </span>
               </h3>
               <h5 className={bodiesStyle.subHeader}>
-                {configElement?.mass}
+                {configElement?.subHeader}
               </h5>
               <ul
                 className={bodiesStyle.details}

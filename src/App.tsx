@@ -42,12 +42,68 @@ const appStyle = mergeStyles({
   height: '100%',
   background: '#ccc',
 });
-
+// convert data in file to a format DataStyle will accept
+const convertFromCMC = (data2: any) => {
+  const ne: any[] = data2.map((lD: any, i: number) => {
+    const x = (i * 50) % 900;
+    const y = Math.floor(i / 15) * 15 + 90;
+    const detailKeys = ['symbol',
+      'circulating_supply',
+      // 'cmc_rank',
+      'date_added',
+      'last_updated',
+      'max_supply',
+      'num_market_pairs',
+      // 'platform',
+      // 'self_reported_circulating_supply',
+      // 'self_reported_market_cap',
+      // 'slug',
+      'symbol',
+      'total_supply',
+    ];
+    const details = Object
+      .entries(lD)
+      .filter(([k, v]) => detailKeys.includes(k))
+      .reduce((acc, [k, v]: [any, any]) => {
+        let val = v;
+        // const price = v?.USD ? v.USD.price: '';
+        if (k === 'id') val = String(v);
+        else if (v === null) val = ' - ';
+        else if (k === 'date_added' || k === 'last_updated') val = new Date(v).toISOString();
+        else if (typeof v !== 'number' && typeof v !== 'string') {
+          return acc;
+        }
+        return { ...acc, [k]: val };
+      }, {}) as any;
+    return {
+      id: String(lD.id),
+      name: lD.name,
+      subHeader: `$${Number(lD.quote?.USD?.price).toFixed(2)}`,
+      details,
+      x,
+      y,
+      size: (lD.id === 1) ? 80 : 40,
+      color: '#ccc',
+      lineWidth: '3',
+    };
+  }) as any[];
+  return ne;
+};
+// const lineD  atum: any[] = convertFromCMC(lineData.data)
+const initValue = [{
+  id: 1,
+  name: 'Bitcoin',
+  symbol: 'BTC',
+  slug: 'bitcoin',
+  num_market_pairs: 9471,
+  date_added: '2013-04-28T00:00:00.000Z',
+}];
+const datumCMC: any = convertFromCMC(initValue);
 function App() {
   initializeIcons();
   const [bodies, setBodies] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [configState, setConfigState] = useState(config);
+  const [configState, setConfigState] = useState(null);
   useEffect(() => {
     matterMotor.listen((matterMotorBodies: any) => {
       setBodies(matterMotorBodies);
@@ -57,26 +113,31 @@ function App() {
     }, 3000);
     axios.get('https://goatstone.com/info')
       .then((res) => {
-        console.log(res.data.data);
-        // const a = convertFromCMC(res.data.data)
+        const a: any = convertFromCMC(res.data.data);
         // dataStyle.setAll(a)
+        setConfigState(a);
+        console.log(res.data.data, a);
       });
   }, []);
 
   return (
     <div className={appStyle}>
-      <MatterDOM
-        width={width}
-        height={height}
-        matterMotor={matterMotor}
-        config={configState}
-        focusId$={focusId$}
-      />
-      <MatterBodies
-        bodies={bodies}
-        config={configState}
-        focusId$={focusId$}
-      />
+      {configState && (
+        <MatterDOM
+          width={width}
+          height={height}
+          matterMotor={matterMotor}
+          config={configState}
+          focusId$={focusId$}
+        />
+      )}
+      {configState && (
+        <MatterBodies
+          bodies={bodies}
+          config={configState}
+          focusId$={focusId$}
+        />
+      )}
       <div
         style={{
           display: 'flex',
