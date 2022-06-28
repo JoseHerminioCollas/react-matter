@@ -11,8 +11,8 @@ const nasaMeteor = (data: any[]) => {
     .sort((a: any, b: any) => Number(b.mass) - Number(a.mass))
     .slice(0, 100)
     .map((e, i) => {
-      const x = (i * 50) % 900;
-      const y = Math.floor(i / 15) * 15 + 90;
+      const x = 0;
+      const y = 0;
       const size = (i < 3) ? 75 : 30;
       const rand = Math.round(Math.random() * 5 + 10).toString(16);
       const color = `#${rand}${rand}${rand}`;

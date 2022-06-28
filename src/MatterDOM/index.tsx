@@ -95,8 +95,10 @@ function MatterDOM({
       ballComposite.bodies.forEach((body) => {
         const isInside = Matter.Bounds.contains(boundsA, body.position);
         if (!isInside) {
-          // TODO find a random position to place the body
-          Matter.Body.setPosition(body, { x: 100, y: 100 });
+          const offSet = 5;
+          const x = offSet + (Math.random() * (width - (offSet * 2)));
+          const y = offSet + (Math.random() * (height - (offSet * 2)));
+          Matter.Body.setPosition(body, { x, y });
         }
       });
       const emitBodies = ballComposite.bodies.map((e: any) => ({

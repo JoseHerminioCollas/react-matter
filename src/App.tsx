@@ -34,7 +34,14 @@ const cancelIconClass = mergeStyles({
 const focusId$ = new BehaviorSubject(null);
 const width = window.innerWidth;
 const height = window.innerHeight - 50;
-const config = nasaMeteor(data);
+const config = nasaMeteor(data)
+  .map((e) => {
+    const offSet = 5;
+    const x = offSet + Math.random() * (width - (offSet * 2));
+    const y = offSet + Math.random() * (height - (offSet * 2));
+    return { ...e, x, y };
+  });
+console.log(config);
 const appStyle = mergeStyles({
   position: 'absolute',
   width: '100%',
