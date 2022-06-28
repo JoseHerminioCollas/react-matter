@@ -83,11 +83,10 @@ function MatterDOM({
       );
       if (matchedBodies.length > 0 && matchedBodies[0].label === 'Circle Body') {
         if (matchedBodies[0].circleRadius && matchedBodies[0].circleRadius < 50) {
-          Body.set(matchedBodies[0], 2, 2);
           matchedBodies[0].render.fillStyle = '#fff'; // TODO highlightColor
-          Body.scale(matchedBodies[0], 2, 2);
+          Body.scale(matchedBodies[0], 2.5, 2.5);
         } else {
-          Body.scale(matchedBodies[0], 0.5, 0.5);
+          Body.scale(matchedBodies[0], 0.4, 0.4);
         }
       }
     });

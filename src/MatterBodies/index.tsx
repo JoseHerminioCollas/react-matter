@@ -4,17 +4,16 @@ import Matter from 'matter-js';
 
 const bodiesStyle = mergeStyleSets({
   container: {
-    fontSize: '0.9em',
+    fontSize: '0.8em',
     position: 'absolute',
     pointerEvents: 'none',
-    overflow: 'hidden',
     margin: 0,
     outline: 'none',
     textAlign: 'center',
   },
   header: {
     display: 'inline-block',
-    margin: '18px 0 0 0',
+    margin: '6px 0 0 0',
     padding: '2px',
     backgroundColor: 'rgba(220, 220, 220, 0.5)',
     borderRadius: '10%',
@@ -72,7 +71,7 @@ const MatterBodies: MatterBodiesI = function ({ bodies, config, focusId$ }) {
               <h3
                 className={bodiesStyle.header}
                 style={{
-                  fontSize: (name && [...name].length > 8) ? '0.9em' : '1.2em',
+                  fontSize: (name && [...name].length > 7) ? '0.9em' : '1.2em',
                 }}
               >
                 <span className={bodiesStyle.opaque}>
